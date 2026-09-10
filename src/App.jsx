@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Hero from './components/Hero.jsx'
 import FilterBar from './components/FilterBar.jsx'
 import Feed from './components/Feed.jsx'
+import Grain from './components/Grain.jsx'
 import { useFeed } from './hooks/useFeed.js'
 
 export default function App() {
@@ -9,7 +10,9 @@ export default function App() {
   const { articles, status, errorMessage, reload, remix } = useFeed(category)
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <Grain opacity={0.035} position="fixed" className="z-50" />
+
       <Hero headlines={articles.slice(0, 10).map((a) => a.title)} />
 
       <main>
@@ -28,7 +31,7 @@ export default function App() {
         />
       </main>
 
-      <footer className="max-w-prose mx-auto px-6 pb-16">
+      <footer className="max-w-5xl mx-auto px-6 pb-16">
         <p className="font-body text-xs text-muted">
           Headlines via GNews, NewsData.io and NewsAPI.org. Captions generated live by an LLM and
           may be wrong, unfair, or funnier than intended.

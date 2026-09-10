@@ -30,41 +30,52 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .ticker-mask {
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
 }
 
+/* Ticker */
 @keyframes ticker {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
-
 .ticker-track {
   animation: ticker 55s linear infinite;
 }
 
+/* Card entrance */
 @keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 .rise-in {
   animation: rise-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Ambient hero aurora */
+@keyframes aurora-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-4%, 3%, 0) scale(1.12); }
+}
+@keyframes aurora-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(5%, -4%, 0) scale(1.08); }
+}
+.aurora-a {
+  animation: aurora-drift-a 24s ease-in-out infinite;
+}
+.aurora-b {
+  animation: aurora-drift-b 28s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .ticker-track {
-    animation: none;
-  }
-  .rise-in {
+  .ticker-track,
+  .rise-in,
+  .aurora-a,
+  .aurora-b {
     animation: none;
   }
 }

@@ -1,10 +1,10 @@
 export function LoadingSkeleton() {
   return (
-    <div className="space-y-4">
-      {[0, 1, 2].map((i) => (
+    <div className="columns-1 lg:columns-2 gap-5">
+      {[0, 1, 2, 3].map((i) => (
         <div
           key={i}
-          className="rounded-2xl bg-card border border-line px-6 py-6 sm:px-8 sm:py-7 animate-pulse"
+          className="break-inside-avoid mb-5 rounded-2xl bg-card border border-line px-6 py-6 sm:px-8 sm:py-7 animate-pulse"
         >
           <div className="h-3 w-32 bg-line rounded mb-6" />
           <div className="h-6 w-full bg-line rounded mb-2" />
