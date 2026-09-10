@@ -2,6 +2,8 @@
 // chat completions endpoint, so no extra SDK is needed — plain fetch works.
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
+// llama-3.3-70b-versatile was retired by Groq in Aug 2026 — gpt-oss-120b is
+// their recommended replacement (similar quality, faster inference).
 const MODEL = 'openai/gpt-oss-120b'
 
 export const TONES = ['deadpan', 'unhinged', 'wholesome', 'ominous', 'petty']
@@ -22,7 +24,7 @@ function extractJson(text) {
   return JSON.parse(text.slice(start, end + 1))
 }
 
-async function callGroq(messages, { temperature = 0.9 } = {}) {
+async function callGroq(messages, { temperature = 0.9, maxTokens = 1024 } = {}) {
   const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) throw new Error('GROQ_API_KEY is not configured')
 
@@ -36,7 +38,11 @@ async function callGroq(messages, { temperature = 0.9 } = {}) {
       model: MODEL,
       messages,
       temperature,
-      max_tokens: 1024
+      max_tokens: maxTokens,
+      // gpt-oss models default to "medium" reasoning effort, which can burn
+      // through the whole token budget thinking before it writes the actual
+      // JSON answer. This task doesn't need deep reasoning, so keep it low.
+      reasoning_effort: 'low'
     })
   })
 
@@ -46,7 +52,13 @@ async function callGroq(messages, { temperature = 0.9 } = {}) {
   }
 
   const data = await res.json()
-  return data.choices?.[0]?.message?.content?.trim() || ''
+  const message = data.choices?.[0]?.message
+  const content = message?.content?.trim()
+  if (content) return content
+
+  // Fallback: some reasoning-model responses land the text in `reasoning`
+  // instead of `content` if generation got cut off mid-answer.
+  return message?.reasoning?.trim() || ''
 }
 
 export async function captionHeadlines(articles) {
@@ -56,17 +68,21 @@ export async function captionHeadlines(articles) {
     .map((a, i) => `${i + 1}. ${a.title}${a.description ? ` — ${a.description}` : ''}`)
     .join('\n')
 
-  const content = await callGroq([
-    { role: 'system', content: SYSTEM_PROMPT },
-    { role: 'user', content: list }
-  ])
+  const content = await callGroq(
+    [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: list }
+    ],
+    { maxTokens: 2500 }
+  )
 
   let parsed
   try {
     parsed = extractJson(content)
-  } catch {
+  } catch (err) {
     // Fall back to a flat tone if the model didn't return clean JSON,
     // so the feed still renders instead of erroring out.
+    console.error('captionHeadlines: failed to parse Groq response', err.message, content.slice(0, 500))
     parsed = articles.map(() => ({ caption: null, tone: 'deadpan' }))
   }
 
