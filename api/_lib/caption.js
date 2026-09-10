@@ -2,7 +2,7 @@
 // chat completions endpoint, so no extra SDK is needed — plain fetch works.
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
-const MODEL = 'llama-3.3-70b-versatile'
+const MODEL = 'openai/gpt-oss-120b'
 
 export const TONES = ['deadpan', 'unhinged', 'wholesome', 'ominous', 'petty']
 
