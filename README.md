@@ -1,4 +1,5 @@
-# Doomscroll, but funnier
+# Pyto - Doomscroll, but funnier
+### by Probanicoti
 
 News headlines, pulled live from three free news APIs, rewritten as meme-style
 one-liners by a free LLM. No database — everything lives in memory for the
