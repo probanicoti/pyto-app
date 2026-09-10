@@ -2,13 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html {
-    color-scheme: dark;
-  }
+:root {
+  color-scheme: dark;
+  --color-bg: 18 20 28;       /* #12141C */
+  --color-card: 26 29 40;     /* #1A1D28 */
+  --color-text: 236 231 221;  /* #ECE7DD */
+  --color-muted: 134 138 153; /* #868A99 */
+  --color-line: 43 47 61;     /* #2B2F3D */
+}
 
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-bg: 245 243 238;    /* #F5F3EE */
+  --color-card: 255 255 255;  /* #FFFFFF */
+  --color-text: 27 29 36;     /* #1B1D24 */
+  --color-muted: 120 124 138; /* #787C8A */
+  --color-line: 228 225 216;  /* #E4E1D8 */
+}
+
+@layer base {
   body {
-    @apply bg-ink text-paper font-body antialiased;
+    @apply bg-ink text-paper font-body antialiased transition-colors duration-300;
   }
 
   ::selection {

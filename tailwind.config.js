@@ -4,12 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: '#12141C',
-        card: '#1A1D28',
-        card2: '#20232F',
-        paper: '#ECE7DD',
-        muted: '#868A99',
-        line: '#2B2F3D',
+        // These read from CSS variables set in index.css, and flip between
+        // the dark and light palettes based on the [data-theme] attribute
+        // on <html> — so `bg-ink` / `text-paper` etc. stay the same class
+        // names in both themes, just pointing at different values.
+        ink: 'rgb(var(--color-bg) / <alpha-value>)',
+        card: 'rgb(var(--color-card) / <alpha-value>)',
+        paper: 'rgb(var(--color-text) / <alpha-value>)',
+        muted: 'rgb(var(--color-muted) / <alpha-value>)',
+        line: 'rgb(var(--color-line) / <alpha-value>)',
         gold: '#E8A33D',
         teal: '#4FA69C',
         coral: '#E8654F',

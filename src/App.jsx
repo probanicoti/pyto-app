@@ -3,15 +3,24 @@ import Hero from './components/Hero.jsx'
 import FilterBar from './components/FilterBar.jsx'
 import Feed from './components/Feed.jsx'
 import Grain from './components/Grain.jsx'
+import ThemeToggle from './components/ThemeToggle.jsx'
 import { useFeed } from './hooks/useFeed.js'
+import { useTheme } from './hooks/useTheme.js'
 
 export default function App() {
   const [category, setCategory] = useState('all')
   const { articles, status, errorMessage, reload, remix } = useFeed(category)
+  const { theme, toggle } = useTheme()
 
   return (
     <div className="min-h-screen relative">
-      <Grain opacity={0.035} position="fixed" className="z-50" />
+      <Grain
+        opacity={theme === 'light' ? 0.025 : 0.035}
+        position="fixed"
+        className="z-40"
+        blend={theme === 'light' ? 'multiply' : 'overlay'}
+      />
+      <ThemeToggle theme={theme} onToggle={toggle} />
 
       <Hero headlines={articles.slice(0, 10).map((a) => a.title)} />
 

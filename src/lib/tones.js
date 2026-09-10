@@ -10,6 +10,8 @@ export function toneStyle(tone) {
   return TONE_STYLES[tone] || TONE_STYLES.deadpan
 }
 
+export const TONE_IDS = Object.keys(TONE_STYLES)
+
 export const CATEGORIES = [
   { id: 'all', label: 'Everything' },
   { id: 'world', label: 'World' },
